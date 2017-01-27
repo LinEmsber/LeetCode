@@ -1,3 +1,5 @@
+/* zigzag conversion */
+
 char *convert(char *s, int nRows)
 {
         if ( (s == NULL) || (nRows < 1) ) {
@@ -9,8 +11,8 @@ char *convert(char *s, int nRows)
         const size_t len = strlen(s);
 
         // left space for '\0' in the end of a string
-        char* output = (char*) malloc (sizeof(char) * ( len + 1));
-        char* head = output;
+        char * output = (char*) malloc (sizeof(char) * ( len + 1));
+        char * head = output;
         output[len] = '\0';
 
         // char *strcpy(char *dest, const char *src);
@@ -28,7 +30,7 @@ char *convert(char *s, int nRows)
                         *output++ = s[index];
 
                         // Otherwise, there are middle values, using (2*nRows-2-2*row) rule
-                        // notice that nRows-1 is the last row
+                        // Notice that nRows-1 is the last row.
                         if ( (row > 0) && (row < nRows-1) && ( (index + 2*nRows - 2 - 2*row) < len) ) {
 
                                 *output++ = s[index + 2*nRows - 2 - 2*row];
