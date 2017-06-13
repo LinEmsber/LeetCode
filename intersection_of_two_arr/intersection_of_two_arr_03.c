@@ -3,88 +3,172 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define MIN(x, y)	y ^ ( ( x ^ y ) & -( x < y ) )
-#define SWAP(a, b)	( ( (a) == (b) ) || ( ( (a) ^= (b) ), ( (b) ^= (a) ), ( (a) ^= (b) ) ) )
-
-/* quick sort
- *
- * @numbers: the number of integer want to sort
- * @begin: the begin index of array
- * @end: the end index of array
+/**
+ * Return an array of size *returnSize.
+ * Note: The returned array must be malloced, assume caller calls free().
  */
-void sort(int* numbers, int begin, int end)
-{
-	int l = begin;
-	int r = end;
-	int v = numbers[l+(r-l)/2];
 
-	while(l <= r)
-	{
-		while(numbers[l] < v) l++;
-		while(numbers[r] > v) r--;
-		if(l <= r)
-		{
-			SWAP(*(numbers + l), *(numbers + r));
-			l++;
-			r--;
-		}
-	}
+ //typedef boolean bool;
+typedef struct hash_node_ {
 
-	if(begin < r)
-		sort(numbers, begin, r);
+        int key;
+        int data;
+        struct hash_node_ *next;
+} hash_node;
+typedef struct hash_table_ {
 
-	if(l < end)
-		sort(numbers, l, end);
+        hash_node **array;
+        int size;
+        //hash_func_t hash_func;
+} hash_table_t;
+
+
+
+void hash_table_init(hash_table_t *ht,int size) {
+        memset(ht,0,sizeof(hash_table_t));
+
+        ht->size = size;
+        ht->array = (hash_node **)malloc(sizeof(hash_node *) * size);
+        int i=0;
+        for(i=0;i<size;i++) {
+
+                ht->array[i]= NULL;
+        }
 }
 
+int hash_func(int key, int size) {
 
-/* intersection, find the intersection of two integer array
- * Using quick sort to two arrays.
- *
- * @arr_1: the first array
- * @arr_1_len: the length of array_1
- * @arr_2: the first array
- * @arr_2_len: the length of array_2
- * @return_len: the length of return array
- */
-int *intersection(int* arr_1, int arr_1_len, int* arr_2, int arr_2_len, int *return_len)
-{
+        if(key <0) {
+            key = 0-key;
+        }
+        return key%size;
 
-	int len = MIN(arr_1_len, arr_2_len);
-	int* arr = (int *) malloc( sizeof(int) * len ); //the size of the result will at most be size;
-	int ret_arr_index = -1;
-	int index_1 = 0, index_2 = 0;
-
-	// sort arrays
-	sort(arr_1, 0, arr_1_len-1);
-	sort(arr_2, 0, arr_2_len-1);
-
-	while(index_1 < arr_1_len && index_2 < arr_2_len)
-	{
-		// compare the integers of two arrays
-		if(arr_1[index_1] > arr_2[index_2]){
-			index_2++;
-
-		}else if(arr_1[index_1] < arr_2[index_2]){
-			index_1++;
-
-		// only collect the equal integers
-		}else{
-			//avoid duplicates;
-			if(ret_arr_index == -1 || arr[ret_arr_index] != arr_1[index_1]){
-				arr[++ret_arr_index] = arr_1[index_1];
-			}
-
-			// the index of two arrays move forward one.
-			index_1++;
-			index_2++;
-		}
-	}
-
-	*return_len = ret_arr_index+1;
-	return arr;
 }
 
+bool hash_table_insert(hash_table_t *ht,int key) {
+
+        if(ht->size ==0) {
+
+                return -1;
+        }
+
+        int index = hash_func(key,ht->size);
+        hash_node *list  = ht->array[index], *prev = NULL;
+
+        while(list != NULL) {
+
+                if(list->key == key) {
+                        (list->data) ++ ;
+                        return true;
+                }
+                prev = list;
+                list = list->next;
+
+        }
+
+        list = malloc(sizeof(hash_node));
+        list->key = key;
+        list->data = 1;
+        list->next = NULL;
+
+        if(prev ==NULL) {
+
+                ht->array[index] = list;
+                return true;
+        }
+        prev->next = list;
+        return true;
+
+}
+
+int hash_table_find(hash_table_t *ht,int key) {
+
+        if(ht->size ==0) {
+
+                return -1;
+        }
+
+        int index = hash_func(key,ht->size);
+        hash_node *list  = ht->array[index], *prev = NULL;
+
+        while(list != NULL) {
+
+                if(list->key == key) {
+                        return list->data;
+                }
+                prev = list;
+                list = list->next;
+
+        }
+
+        return -1;
+
+}
+
+bool hash_table_remove(hash_table_t *ht,int key) {
+
+        if(ht->size ==0) {
+
+                return -1;
+        }
+
+        int index = hash_func(key,ht->size);
+        hash_node *list  = ht->array[index], *prev = NULL;
+        while(list!=NULL) {
+
+                if(list->key == key) {
+                        break;
+                }
+                prev = list;
+                list = list->next;
+
+        }
+
+        if(list == NULL) {
+                return false;
+        }
+
+        hash_node *next = list->next;
+        free(list);
+        list = NULL;
+        if(prev ==NULL) {
+                ht->array[index] = next;
+                return true;
+        }
+
+        prev->next = next;
+        return true;
+
+}
+
+int* intersection(int* nums1, int nums1Size, int* nums2, int nums2Size, int* returnSize) {
+
+    //Find the smallest array
+    int hash_size = nums1Size>nums2Size? nums2Size:nums1Size;
+    int big = nums1Size>nums2Size? nums1Size:nums2Size;
+    int *big_array = nums1Size>nums2Size? nums1:nums2;
+    int* array = nums1Size>nums2Size? nums2:nums1;
+    hash_table_t ht;
+    hash_table_init(&ht,hash_size);
+    int *nums = malloc(sizeof(int)*hash_size);
+    *returnSize =0;
+    for(int i=0;i<hash_size;i++) {
+
+        hash_table_insert(&ht,array[i]);
+
+    }
+
+    for(int j=0;j<big;j++) {
+
+        if(hash_table_find(&ht,big_array[j]) > 0) {
+            nums[(*returnSize)++] = big_array[j];
+            hash_table_remove(&ht,big_array[j]);
+        }
+    }
+
+    return nums;
+
+}
 
 /* print out the array with specific length
  *
