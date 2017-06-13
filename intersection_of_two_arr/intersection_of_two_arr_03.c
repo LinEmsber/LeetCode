@@ -71,7 +71,7 @@ int *intersection(int* arr_1, int arr_1_len, int* arr_2, int arr_2_len, int *ret
 		// only collect the equal integers
 		}else{
 			//avoid duplicates;
-			if(ret_arr_index==-1 || arr[ret_arr_index] != arr_1[index_1]){
+			if(ret_arr_index == -1 || arr[ret_arr_index] != arr_1[index_1]){
 				arr[++ret_arr_index] = arr_1[index_1];
 			}
 
@@ -103,11 +103,11 @@ void print_array(int *arr, int arr_len)
 
 int main()
 {
-	int i;
+	int * result_array;
 	int ret_len;
 
 	int a_1[] = {111, 3, 7 ,30, 4, 3, 500, 5, 100, 3, 6, 4, 7, 500};
-	int a_2[] = {2, 30, 1000, 3, 5, 500, 60, 4, 7};
+	int a_2[] = {500, 2, 3, 30, 1000, 3, 5, 500, 60, 4, 7};
 
 	// int a_1[] = {111};
 	// int a_2[] = {111};
@@ -123,8 +123,12 @@ int main()
 	printf("arr_2: ");
 	print_array(a_2, a_2_len);
 
+	result_array = intersection(a_1, a_1_len, a_2, a_2_len, &ret_len);
+
 	printf("arr intersection: ");
-	print_array(intersection(a_1, a_1_len, a_2, a_2_len, &ret_len), min_len );
+	print_array(result_array, min_len );
+
+	free(result_array);
 
 	return 0;
 }
