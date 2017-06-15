@@ -11,20 +11,24 @@
  * so the function should return 3.
  */
 
-int hamming_weight(uint32_t n)
+int hamming_weight( int a)
 {
-	int i;
-	int tmp;
-	int count = 0;
+        // count bits set in this (32-bit value)
+        unsigned int v = a;
+        // store the total here
+        unsigned int c;
 
-	for (i = 0; i < 32; i++){
-		tmp = n >> i;
-		if ( (tmp & 0x01) == 0x01 ){
-			count++;
-		}
-	}
+        // Magic Binary Numbers
+        static const int S[] = {1, 2, 4, 8, 16};
+        static const int B[] = {0x55555555, 0x33333333, 0x0F0F0F0F, 0x00FF00FF, 0x0000FFFF};
 
-	return count;
+        c = v - ((v >> 1) & B[0]);
+        c = ((c >> S[1]) & B[1]) + (c & B[1]);
+        c = ((c >> S[2]) + c) & B[2];
+        c = ((c >> S[3]) + c) & B[3];
+        c = ((c >> S[4]) + c) & B[4];
+
+        return c;
 }
 
 int main()
