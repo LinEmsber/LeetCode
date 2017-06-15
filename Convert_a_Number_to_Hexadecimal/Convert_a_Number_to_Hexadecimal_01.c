@@ -8,7 +8,7 @@ char * toHex(int num)
 
 	int i = 0;
 	int tmp;
-	unsigned int * unum = &num;
+	unsigned int * unum = (unsigned int *)&num;
 
 	/* Include one byte for null byte and set it. */
 	char * res = (char *) malloc(8 + 1);
