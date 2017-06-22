@@ -1,3 +1,7 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+
 void swap(int v[], int i, int j)
 {
 	int tmp;
@@ -38,7 +42,7 @@ void quick_sort( int v[], int left, int right)
 
 }
 
-int arrayPairSum(int* nums, int nums_size)
+int arrayPairSum(int * nums, int nums_size)
 {
 	int i;
 	int sum_min = 0;
@@ -50,4 +54,20 @@ int arrayPairSum(int* nums, int nums_size)
 	}
 
 	return sum_min;
+}
+
+
+int main()
+{
+	int number_array[20] = {93, 10, 40, 50, 99, 18, 24, 52, 12, 83,
+				56, 11, 72, 77, 90, 15, 26, 7, 64, 82};
+
+	int result;
+
+	printf("sizeof(number_array): %zu\n", sizeof(number_array));
+
+	result = arrayPairSum(number_array, 20);
+	printf("result: %d\n", result);
+
+	return 0;
 }
