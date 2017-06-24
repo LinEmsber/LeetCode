@@ -1,6 +1,53 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+typedef struct _matrix MATRIX;
+struct _matrix {
+	int ** matrix;
+	int row;
+	int column;
+};
+
+MATRIX * create_matrix( int rows, int columns, int base_number)
+{
+	int i, j;
+	int counter = base_number;
+
+	// Dynamically create 2D array and add data to it from input stream
+	int ** matrix = (int **) calloc( rows, sizeof( int* ) );
+
+	for( i = 0; i < rows; i++ ) {
+		matrix[i] = (int *) calloc( columns, sizeof( int ) );
+
+		for( j = 0; j < columns; j++ ) {
+			matrix[i][j] = counter;
+			counter++;
+		}
+	}
+
+	// save the martix into MATRIX structure
+	MATRIX * m = (MATRIX *) malloc( sizeof( MATRIX ) );
+
+	m -> matrix = matrix;
+	m -> row = rows;
+	m -> column = columns;
+
+	return m;
+}
+
+void print_matrix( int ** matrix, int row, int column )
+{
+	int i, j;
+	for( i = 0; i < row; i++ ) {
+		for( j = 0; j < column; j++ ) {
+			printf( "%4d", matrix[i][j] );
+		}
+		printf("\n");
+	}
+}
+
+
+
 /**
  * Return an array of arrays of size *returnSize.
  * The sizes of the arrays are returned as *columnSizes array.
@@ -14,16 +61,16 @@ int ** matrixReshape(int ** nums, int nums_m, int nums_n, int r, int c, int ** c
 		c = nums_n;
 	}
 
-        int i;
+	int i;
 
-        /* Return an array of arrays of size *returnSize. */
+	/* Return an array of arrays of size *returnSize. */
 	*returnSize = r;
 
-        /* The sizes of the arrays are returned as *columnSizes array. */
+	/* The sizes of the arrays are returned as *columnSizes array. */
 	*columnSizes = (int*) malloc(r * sizeof(int));
 
-        int ** result = (int **) malloc(r * sizeof(int*));
-        /* The sizes of the arrays are returned as *columnSizes array. */
+	int ** result = (int **) malloc(r * sizeof(int*));
+	/* The sizes of the arrays are returned as *columnSizes array. */
 	for (i = 0; i < r; ++i) {
 		result[i] = (int*) malloc(c * sizeof(int));
 		(*columnSizes)[i] = c;
@@ -38,34 +85,22 @@ int ** matrixReshape(int ** nums, int nums_m, int nums_n, int r, int c, int ** c
 
 int main()
 {
-        // int integer_array[2][6] = {
-        //         {0, 1, 2, 3, 4, 5} ,
-        //         {24, 25, 26, 27, 28, 29} };
+	int ** matrix_reshaped;
+	int * col_size;
+	int result_size;
 
-        int i, j;
-        int k;
-        int rows = 2;
-        int columns = 6;
+	MATRIX * matrix_orig = create_matrix(5, 6, 10);
 
-        int **integer_array = malloc(rows * sizeof (int *) );
+	printf("The origin martix:\n");
+	print_matrix(matrix_orig->matrix, 5, 6);
 
-        for (k = 0; k < rows; k++) {
-            integer_array[k] = malloc( columns * sizeof(int) );
-        }
+	/* *col_size@3 = {10, 10, 10};
+	 * result_size = 10;
+	 */
+	matrix_reshaped = matrixReshape(matrix_orig->matrix, 5, 6, 3, 10, &col_size, &result_size);
 
-        for (i = 0; i < rows; i++){
-                for (j = 0; j < columns; j++){
+	printf("The reshaped martix:\n");
+	print_matrix(matrix_reshaped, 3, 10);
 
-                        *(integer_array + (i * rows) + columns) = i * j;
-                }
-        }
-
-
-        int ** result_array;
-        int * col_size;
-        int * result_size;
-
-        result_array = matrixReshape(integer_array, 2, 6, 3, 4, &col_size, result_size);
-
-        return 0;
+	return 0;
 }
