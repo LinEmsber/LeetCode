@@ -29,7 +29,7 @@ char ** findWords(char ** words, int wordsSize, int * returnSize)
 	int row, is_in_one_row;
 	int size = 0;
 	char * word;
-	char ** rows = (char **) malloc(sizeof(char *) * wordsSize);
+	char ** result_words = (char **) malloc(sizeof(char *) * wordsSize);
 
 	for (i = 0; i < wordsSize; i++) {
 
@@ -69,14 +69,12 @@ char ** findWords(char ** words, int wordsSize, int * returnSize)
 		}
 
 		if (is_in_one_row) {
-			rows[size] = word;
-			size++;
+			result_words[*returnSize] = word;
+			(*returnSize)++;
 		}
-
 	}
 
-	*returnSize = size;
-	return rows;
+	return result_words;
 }
 
 
