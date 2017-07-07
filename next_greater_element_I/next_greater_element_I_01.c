@@ -8,54 +8,57 @@
  */
 int * nextGreaterElement(int * findNums, int findNumsSize, int * nums, int numsSize, int * returnSize)
 {
-	int i, j;
-	int max;
-	int * return_array = NULL;
-	int * nums_hash = NULL;
-
 	*returnSize = findNumsSize;
 
 	if(findNums == NULL || findNumsSize == 0 || nums == NULL || numsSize == 0) {
 		return NULL;
 	}
 
-	/* 1. Create a array to store the result, and find the max element.
+	/* 1. Find the max element, and create a array to store the result,
 	 * 2. Create a hash table to save the corresponding result number of each element of the array, findNumsSize.
 	 * 3. Start to compare each the numbers of two arrays from the first element. If find the greater number,
 	 * then break from the inner loop. And record the result into the hash table.
 	 * 4. Convert the hash table to the result of array.
 	 */
+	 int i, j;
+	 int max;
+	 int * return_array = NULL;
+	 int * nums_hash = NULL;
+
+	 /* find the max element in the nums */
+	 max = 0;
+	 for(i = 0; i < numsSize; i++) {
+		 if(max < nums[i]) {
+			 max = nums[i];
+		 }
+	 }
 
 	return_array = (int *) malloc( findNumsSize * sizeof(int) );
 	if(return_array == NULL) {
                 return NULL;
 	}
+	memset(return_array, 0, findNumsSize * sizeof(int) );
 
-	/* find the max element in the nums */
-	max = 0;
-	for(i = 0; i < numsSize; i++) {
-		if(max < nums[i]) {
-			max = nums[i];
-		}
-	}
-
+	/* Because the index of the array is zero based, we allocate one more element.
+	 * It is convenient for numbers to be stored into the hash table.
+	 */
 	nums_hash = (int *) malloc( (max + 1) * sizeof(int) );
 	if(nums_hash == NULL) {
                 return NULL;
 	}
+	memset(nums_hash, -1, (max + 1) * sizeof(int) );
 
-	/* Compare all elements of the array, findNumsSize. */
+	/* Compare all elements of the array, findNumsSize, and store the result into hash. */
 	for(i = 0; i < numsSize - 1; i++) {
 
-		nums_hash[nums[i]] = -1;
 		for(j = i + 1; j < numsSize; j++) {
-
 			if(nums[j] > nums[i]) {
 				nums_hash[nums[i]] = nums[j];
 				break;
 			}
 		}
 	}
+
 	/* The last element. */
 	nums_hash[nums[numsSize-1]] = -1;
 
