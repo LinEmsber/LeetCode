@@ -3,27 +3,28 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-// structure
+/* typedef */
 typedef struct hash_node hash_node_t;
+typedef struct hash_table hash_table_t;
+
+/* structure */
 struct hash_node {
 	int key;
 	int val;
 };
-
-typedef struct hash_table hash_table_t;
 struct hash_table {
 	int size;
 	struct hash_node ** storage;
 };
 
-// declaration
+/* declaration */
 hash_table_t * hash_create(int size);
 void hash_destroy(hash_table_t * hash_table);
 void hash_set_node(hash_table_t * hash_table, int key, int value);
-hash_node_t * hash_get_node(hash_table_t * hash_table, int key);
+hash_node_t * hash_search(hash_table_t * hash_table, int key);
 
 
-// function
+/* function */
 
 /* create a hash table
  *
@@ -91,7 +92,7 @@ void hash_set_node(hash_table_t * hash_table, int key, int value)
  * @hash_table: the target hash table
  * @key: the key
  */
-hash_node_t * hash_get_node(hash_table_t * hash_table, int key)
+hash_node_t * hash_search(hash_table_t * hash_table, int key)
 {
 	int hash = abs(key) % hash_table->size;
 	hash_node_t * node;
@@ -119,26 +120,26 @@ int * twoSum(int * nums, int numsSize, int target)
 {
 	int i;
 	int rest = 0;
+
 	hash_table_t * hash_table;
 	hash_node_t * node;
-	int * result = (int *) malloc( sizeof(int) * 2 );
+	hash_table = hash_create(numsSize);
 
-	// make the hash_table_t 2x size of the numsSize
-	hash_table = hash_create(numsSize * 2);
+	int * result = (int *) malloc( sizeof(int) * 2 );
 
 	for(i = 0; i < numsSize; i++) {
 
 		rest = target - nums[i];
-		node = hash_get_node(hash_table, rest);
+		node = hash_search(hash_table, rest);
 
-		// If we find it, we get the value from this node.
+		/* If we find the hash node of rest number. */
 		if (node) {
 			result[0] = node->val ;
 			result[1] = i ;
 			hash_destroy(hash_table);
 			break;
 
-		// If we dont find it, we save this num[i] into hash table.
+		/* If we dont find it, we store this num[i] into hash table. */
 		} else {
 			hash_set_node(hash_table, nums[i], i);
 		}
