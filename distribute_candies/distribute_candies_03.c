@@ -2,12 +2,16 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
+/* 1. Calculate the half size, because it is the maximum of sister can obtain.
+ * 2. Create a char hash table to record the uncounted numbers in bits, and add the count.
+ * 3. If the count reaches the half size, that is the maximum, and we can just return it.
+ */
 int distributeCandies(int * candies, int candiesSize)
 {
         int i;
         /* 25000 * 8 = 200000 */
-        int hash[25001] = {0};
-        int count = 0, number_index, bit, hash_index, bit_index;
+        char hash[25001] = {0}, bit;
+        int count = 0, number_index, hash_index, bit_index;
 
         for ( i = 0; i < candiesSize; i++ ) {
 

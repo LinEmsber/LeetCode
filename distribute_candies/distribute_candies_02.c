@@ -2,6 +2,10 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
+/* 1. Find the maximum and the minimum of the numbers.
+ * 2. Create a fit range hash table to record uncounted numbers.
+ */
+
 int distributeCandies(int * candies, int candiesSize)
 {
         int i;
