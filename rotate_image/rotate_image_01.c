@@ -16,12 +16,9 @@ void transpose(int ** matrix, int row, int col)
 	unsigned int i, j;
 	for (i = 0; i < row ; i++) {
 		for (j = i; j < col ; j++) {
-
 			if ( i != j ){
-
-				// TODO: fix it
-				// swap( (matrix + i * col + j), (matrix + j * col + i) );
-				swap( (int *)&matrix[i][j], (int *)&matrix[j][i]);
+				// swap( (int *)&matrix[i][j], (int *)&matrix[j][i]);
+				swap( (int *) (*(matrix+i)+j), (int *) ( *(matrix+j)+i) );
 			}
 		}
 	}
@@ -32,8 +29,8 @@ void reverse(int ** matrix, int row, int col)
 	unsigned int i, j;
 	for (i = 0; i < row; i++) {
 		for (j = 0; j < col / 2; j++) {
-			// swap( (matrix + c * row + col), (matrix + c * col + row) );
-			swap( (int *)&matrix[i][j], (int *)&matrix[i][col-j - 1]);
+			// swap( (int *)&matrix[i][j], (int *)&matrix[i][col-j - 1]);
+			swap( (int *) (*(matrix+i)+j), (int *) (*(matrix+i)+col-j-1) );
 		}
 	}
 }
@@ -42,11 +39,9 @@ void reverse(int ** matrix, int row, int col)
 void rotate(int ** matrix, int row, int col)
 {
 	transpose(matrix, row, col);
-
-	print_matrix(matrix, row, col);
-
+	// print_matrix(matrix, row, col);
 	reverse(matrix, row, col);
-
+	// print_matrix(matrix, row, col);
 }
 
 
@@ -74,7 +69,8 @@ void print_matrix(int ** matrix, int row, int col)
         int i, j;
         for ( i = 0; i < row; i++){
                 for ( j = 0; j < col; j++ ){
-                        printf("%d ", matrix[i][j] );
+                        // printf("%d ", matrix[i][j] );
+			printf("%d ", *(*(matrix+i)+j) );
                 }
                 printf("\n");
         }
