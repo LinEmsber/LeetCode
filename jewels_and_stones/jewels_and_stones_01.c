@@ -1,18 +1,18 @@
-int numJewelsInStones(char* J, char* S) 
+int numJewelsInStones(char* J, char* S)
 {
-	int i;
-	int ans = 0;
-	int f[256] = {0};
+	int i, ans = 0;
+	// ASCII table, z: 122, A: 65
+	int cache_arr['z' - 'A' + 1] = {0};
 	unsigned int J_len = strlen(J);
 	unsigned int S_len = strlen(S);
 
 	for ( i = 0; i < J_len; i++ ){
-		f[*J] = 1;
+		cache_arr[*J - 'A'] = 1;
 		J++;
 	}
 
 	for ( i = 0; i < S_len; i++ ){
-		ans += f[*S] & 1;
+		ans += cache_arr[*S - 'A'] & 1;
 		S++;
 	}
 
