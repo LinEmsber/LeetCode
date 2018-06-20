@@ -11,7 +11,8 @@ struct TreeNode
 
 /* Functions. */
 struct TreeNode * new_node(int _data);
-struct TreeNode * array_to_tree_level_order(int array[], struct TreeNode * root, int index, int length);
+// struct TreeNode * array_to_tree_level_order(int array[], struct TreeNode * root, int index, int length);
+struct TreeNode * array_to_tree_level_order(int array[], int index, int length);
 void print_tree_level_order(struct TreeNode * root);
 void print_tree_given_level(struct TreeNode * root, int level);
 int tree_height(struct TreeNode * node);
@@ -29,17 +30,28 @@ struct TreeNode * new_node(int _data)
 }
 
 /* Construct a complete binary tree from given array in level order. */
-struct TreeNode * array_to_tree_level_order(int array[], struct TreeNode * root, int index, int length)
+// struct TreeNode * array_to_tree_level_order(int array[], struct TreeNode * root, int index, int length)
+// {
+// 	if (index < length){
+// 		struct TreeNode * tmp = new_node(array[index]);
+// 		root = tmp;
+// 		root->left = array_to_tree_level_order(array, root->left, index * 2 + 1, length);
+// 		root->right = array_to_tree_level_order(array, root->right, index * 2 + 2, length);
+// 	}
+// 	return root;
+// }
+struct TreeNode * array_to_tree_level_order(int array[], int index, int length)
 {
 	if (index < length){
-		struct TreeNode * tmp = new_node(array[index]);
-		root = tmp;
-		root->left = array_to_tree_level_order(array, root->left, index * 2 + 1, length);
-		root->right = array_to_tree_level_order(array, root->right, index * 2 + 2, length);
-	}
-	return root;
+		struct TreeNode * root = new_node(array[index]);
+		// root = tmp;
+		root->left = array_to_tree_level_order(array, index * 2 + 1, length);
+		root->right = array_to_tree_level_order(array, index * 2 + 2, length);
+                return root;
+	} else {
+                return NULL;
+        }
 }
-
 /* Print tree in level order. */
 void print_tree_level_order(struct TreeNode * root)
 {
@@ -105,7 +117,7 @@ int main()
 	int array_length = sizeof(int_arr) / sizeof(int_arr[0]);
 
         /* Convert the integer array into the binary tree. */
-	struct TreeNode * root = array_to_tree_level_order(int_arr, root, 0, array_length);
+	struct TreeNode * root = array_to_tree_level_order(int_arr, 0, array_length);
         print_tree_level_order(root);
         printf("\n");
 
