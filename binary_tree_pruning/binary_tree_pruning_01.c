@@ -11,7 +11,6 @@ struct TreeNode
 
 /* Functions. */
 struct TreeNode * new_node(int _data);
-// struct TreeNode * array_to_tree_level_order(int array[], struct TreeNode * root, int index, int length);
 struct TreeNode * array_to_tree_level_order(int array[], int index, int length);
 void print_tree_level_order(struct TreeNode * root);
 void print_tree_given_level(struct TreeNode * root, int level);
@@ -30,28 +29,20 @@ struct TreeNode * new_node(int _data)
 }
 
 /* Construct a complete binary tree from given array in level order. */
-// struct TreeNode * array_to_tree_level_order(int array[], struct TreeNode * root, int index, int length)
-// {
-// 	if (index < length){
-// 		struct TreeNode * tmp = new_node(array[index]);
-// 		root = tmp;
-// 		root->left = array_to_tree_level_order(array, root->left, index * 2 + 1, length);
-// 		root->right = array_to_tree_level_order(array, root->right, index * 2 + 2, length);
-// 	}
-// 	return root;
-// }
 struct TreeNode * array_to_tree_level_order(int array[], int index, int length)
 {
 	if (index < length){
 		struct TreeNode * root = new_node(array[index]);
-		// root = tmp;
+
 		root->left = array_to_tree_level_order(array, index * 2 + 1, length);
 		root->right = array_to_tree_level_order(array, index * 2 + 2, length);
-                return root;
+
+		return root;
 	} else {
-                return NULL;
-        }
+		return NULL;
+	}
 }
+
 /* Print tree in level order. */
 void print_tree_level_order(struct TreeNode * root)
 {
@@ -67,13 +58,13 @@ void print_tree_given_level(struct TreeNode * root, int level)
 		return;
 
 	if (level == 1){
-                printf("%d ", root->val);
-        } else if (level > 1) {
+		printf("%d ", root->val);
+	} else if (level > 1) {
 		print_tree_given_level(root->left, level - 1);
 		print_tree_given_level(root->right, level - 1);
 	} else {
-                printf("Error\n");
-        }
+		printf("Error\n");
+	}
 }
 
 int tree_height(struct TreeNode * node)
@@ -86,11 +77,10 @@ int tree_height(struct TreeNode * node)
 		int r_height = tree_height(node->right);
 
 		/* Use the larger one */
-		if (l_height > r_height){
-                        return(l_height + 1);
-                } else {
-                        return(r_height + 1);
-                }
+		if (l_height > r_height)
+			return l_height + 1;
+		else
+			return r_height + 1;
 	}
 }
 
@@ -113,16 +103,16 @@ struct TreeNode * pruneTree(struct TreeNode * root)
 int main()
 {
 	// int int_arr[] = {2, 4, 6, 8, 10, 12, 14, 16, 18, 20};
-        int int_arr[] = {1, 0, 1, 0, 0, 0, 1};
+	int int_arr[] = {1, 0, 1, 0, 0, 0, 1};
 	int array_length = sizeof(int_arr) / sizeof(int_arr[0]);
 
-        /* Convert the integer array into the binary tree. */
+	/* Convert the integer array into the binary tree. */
 	struct TreeNode * root = array_to_tree_level_order(int_arr, 0, array_length);
-        print_tree_level_order(root);
-        printf("\n");
+	print_tree_level_order(root);
+	printf("\n");
 
-        /* Prune the tree. */
-        pruneTree(root);
+	/* Prune the tree. */
+	pruneTree(root);
 	print_tree_level_order(root);
 	printf("\n");
 
