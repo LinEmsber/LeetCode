@@ -12,9 +12,12 @@ int * findDuplicates(int * nums, int numsSize, int * returnSize)
 	for(i = 0; i < numsSize; i++)
 		int_map[nums[i]]++;
 
-	for(i = 1; i <= numsSize; i++)
-		if( int_map[i] >= 2 )
-			answer[(*returnSize)++] = i;
+	for(i = 1; i <= numsSize; i++){
+		if( int_map[i] >= 2 ){
+			answer[*returnSize] = i;
+			(*returnSize)++;
+		}
+	}
 
 	return answer;
 }
