@@ -1,10 +1,14 @@
 int * partitionLabels(char * S, int * returnSize)
 {
-	*returnSize = 0;
-
 	int i;
 	int S_len = strlen(S);
 	int record[2][26];
+
+	int count = 0;
+	int count_prev = 0;
+	int * answer = (int *) malloc( sizeof(int) * S_len );
+
+	*returnSize = 0;
 	memset(record, 0, sizeof(int) * 2 * 26 );
 
 	/* Record the first and last index of each letter from the string.
@@ -19,10 +23,7 @@ int * partitionLabels(char * S, int * returnSize)
 		}
 	}
 
-	int count = 0;
-	int count_prev = 0;
-	int * answer = (int *) malloc( sizeof(int) * S_len );
-
+	/* Check the S from the first index. */
 	for( i = 0; i < S_len; i++ ) {
 
 		/* count store the last index of letter. */
