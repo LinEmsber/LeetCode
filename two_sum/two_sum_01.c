@@ -116,7 +116,7 @@ hash_node_t * hash_search(hash_table_t * hash_table, int key)
 	return NULL;
 }
 
-int * twoSum(int * nums, int numsSize, int target)
+int * twoSum(int * nums, int numsSize, int target, int* returnSize)
 {
 	int i;
 	int rest = 0;
@@ -137,9 +137,10 @@ int * twoSum(int * nums, int numsSize, int target)
 			result[0] = node->val ;
 			result[1] = i ;
 			hash_destroy(hash_table);
+			*returnSize = 2;
 			break;
 
-		/* If we dont find it, we store this num[i] into hash table. */
+			/* If we dont find it, we store this num[i] into hash table. */
 		} else {
 			hash_set_node(hash_table, nums[i], i);
 		}
